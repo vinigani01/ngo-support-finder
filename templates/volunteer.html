@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Volunteer - NGO Support Finder</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');</script>
+</head>
+<body>
+    <header class="modern-header">
+        <div class="logo-container">
+            <span class="logo-icon">💙</span>
+            <span class="logo-text">NGO Support Finder</span>
+        </div>
+        <nav class="modern-nav">
+            <a href="/" class="modern-nav-link">Back</a>
+            <button onclick="toggleTheme()" class="theme-toggle-btn">🌗 Theme</button>
+        </nav>
+    </header>
+
+    <div class="modern-bg">
+        <div class="modern-card">
+            <h2>Volunteer Application</h2>
+            <div style="margin-bottom:20px; padding:15px; background:rgba(37,99,235,0.1); border-radius:12px; color:var(--primary);">
+                Applying for: <strong>{{ ngo['name'] }}</strong>
+            </div>
+            <form method="POST">
+                <label style="display:block; text-align:left; font-weight:600; margin-bottom:5px;">Full Name</label>
+                <input type="text" name="name" placeholder="Enter your name" required>
+                
+                <label style="display:block; text-align:left; font-weight:600; margin-bottom:5px;">Phone Number</label>
+                <input type="text" name="phone" placeholder="Contact Number" required>
+                
+                <label style="display:block; text-align:left; font-weight:600; margin-bottom:5px;">Your Skills</label>
+                <input type="text" name="skills" placeholder="e.g. Teaching, First Aid, Cooking" required>
+                
+                <button type="submit" class="modern-btn" style="width:100%; margin-top:15px;">Submit & Get Certificate</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>

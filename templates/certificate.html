@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate of Appreciation</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Specific Styles to match the Blue Border Design */
+        body {
+            background-color: #f0f2f5; /* Light gray background for contrast */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif; /* Standard font for certificates */
+        }
+
+        .certificate-box {
+            background: #fff;
+            width: 800px;
+            max-width: 90%;
+            padding: 50px;
+            text-align: center;
+            /* The Thick Blue Border */
+            border: 15px solid #185a9d; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .cert-title {
+            color: #185a9d;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .cert-subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+        .cert-name {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #333;
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 8px;
+            margin: 20px 0;
+            display: block;
+        }
+
+        .cert-body-text {
+            font-size: 1.4rem;
+            color: #444;
+            margin: 20px 0;
+        }
+
+        .cert-ngo {
+            color: #2e7d32; /* Green color from your screenshot */
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .cert-date {
+            font-size: 1rem;
+            color: #000;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .cert-footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hide buttons when printing */
+        @media print {
+            .no-print { display: none; }
+            body { background: #fff; }
+            .certificate-box { box-shadow: none; margin: 0; width: 100%; border: 15px solid #185a9d; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="certificate-box">
+        <div class="cert-title">Certificate of<br>Appreciation</div>
+        
+        <div class="cert-subtitle">This is to certify that</div>
+        
+        <div class="cert-name">{{ data['vol_name'] }}</div>
+        
+        <div class="cert-body-text">has officially volunteered to support</div>
+        
+        <div class="cert-ngo">{{ data['ngo_name'] }}</div>
+        
+        <div class="cert-date">on {{ data['date_applied'] }}</div>
+        
+        <div class="cert-footer">NGO Support Finder Platform</div>
+    </div>
+
+    <div class="no-print" style="text-align: center;">
+        <button onclick="window.print()" class="modern-btn" style="background: #185a9d; margin-bottom: 15px;">Print / Save as PDF</button>
+        <br>
+        <a href="/" style="color: #333; text-decoration: none; font-weight: 600;">Back to Home</a>
+    </div>
+
+</body>
+</html>

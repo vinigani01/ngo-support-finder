@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - NGO Support Finder</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');</script>
+</head>
+<body>
+    <header class="modern-header">
+        <div class="logo-container">
+            <span class="logo-icon">💙</span>
+            <span class="logo-text">NGO Support Finder</span>
+        </div>
+        <nav class="modern-nav">
+            <a href="/login" class="modern-nav-link">Login</a>
+            <button onclick="toggleTheme()" class="theme-toggle-btn">🌗 Theme</button>
+        </nav>
+    </header>
+
+    <div class="modern-bg">
+        <div class="modern-card animate-fadein">
+            <h2>Create Account</h2>
+            <p style="color:var(--text-muted);">Join our community today</p>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Choose a Username" required>
+                <input type="password" name="password" placeholder="Choose a Password" required>
+                <button type="submit" class="modern-btn" style="width:100%; margin-top:10px;">Sign Up</button>
+            </form>
+            <p style="margin-top:20px;">
+                Already have an account? <a href="/login" style="color:var(--primary);">Login</a>
+            </p>
+            
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div style="background:#fee2e2; color:#ef4444; padding:10px; border-radius:8px; margin-top:15px;">
+                  {{ messages[0] }}
+                </div>
+              {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>

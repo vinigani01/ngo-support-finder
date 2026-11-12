@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - NGO Support Finder</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+    </script>
+</head>
+<body>
+    <header class="modern-header">
+        <div class="logo-container">
+            <span class="logo-icon">💙</span>
+            <span class="logo-text">NGO Support Finder</span>
+        </div>
+        <nav class="modern-nav">
+            <a href="/" class="modern-nav-link">Home</a>
+            {% if role == 'admin' %}
+            <a href="/admin" class="modern-nav-link">Admin Dashboard</a>
+            {% endif %}
+            <a href="/logout" class="modern-nav-link">Logout</a>
+            <button onclick="toggleTheme()" class="theme-toggle-btn">🌗 Theme</button>
+        </nav>
+    </header>
+
+    <div class="modern-bg">
+        <div class="modern-card wide">
+            
+            <div class="impact-banner">
+                <span class="impact-count" id="counter-num">{{ impact_count }}</span>
+                <span>Lives Touched & Connections Made</span>
+            </div>
+
+            <form action="/" method="GET" style="display:flex; gap:12px; flex-wrap:wrap;">
+                <input type="text" name="query" placeholder="Search NGO Name..." value="{{ query }}" style="flex:2;">
+                <select name="city" style="flex:1;">
+                    <option value="">All Cities</option>
+                    {% for c in cities %}<option value="{{c}}" {% if selected_city==c %}selected{% endif %}>{{c}}</option>{% endfor %}
+                </select>
+                <select name="category" style="flex:1;">
+                    <option value="">All Categories</option>
+                    {% for c in categories %}<option value="{{c}}" {% if selected_category==c %}selected{% endif %}>{{c}}</option>{% endfor %}
+                </select>
+                <button type="submit" class="modern-btn">Search</button>
+            </form>
+
+            <table class="modern-table">
+                <tr><th>Name</th><th>Category</th><th>City</th><th>Actions</th></tr>
+                {% for ngo in ngos %}
+                <tr>
+                    <td>
+                        <strong>{{ ngo['name'] }}</strong>
+                        {% if ngo['is_urgent'] %}<span class="urgent-badge">URGENT HELP NEEDED</span>{% endif %}
+                    </td>
+                    <td><span style="background:rgba(37,99,235,0.1); color:var(--primary); padding:4px 10px; border-radius:12px; font-size:0.85em; font-weight:600;">{{ ngo['category'] }}</span></td>
+                    <td>{{ ngo['city'] }}</td>
+                    <td>
+                        <a href="{{ ngo['website_url'] }}" target="_blank" class="modern-btn" style="padding:8px 16px; font-size:0.85em; background:var(--secondary);" onclick="trackImpact()">Visit</a>
+                        <a href="{{ url_for('volunteer', ngo_id=ngo['id']) }}" class="modern-btn" style="padding:8px 16px; font-size:0.85em;">Volunteer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+        function trackImpact() {
+            fetch('/track_click');
+            let el = document.getElementById('counter-num');
+            el.innerText = parseInt(el.innerText) + 1;
+        }
+    </script>
+</body>
+</html>

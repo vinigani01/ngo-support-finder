@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - NGO Support Finder</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');</script>
+</head>
+<body>
+    <header class="modern-header">
+        <div class="logo-container">
+            <span class="logo-icon">💙</span>
+            <span class="logo-text">NGO Support Finder</span>
+        </div>
+        <nav class="modern-nav">
+            <span style="opacity:0.7; font-size:0.9em;">Admin Panel</span>
+            <a href="/" class="modern-nav-link">Home</a>
+            <a href="/logout" class="modern-nav-link">Logout</a>
+            <button onclick="toggleTheme()" class="theme-toggle-btn">🌗 Theme</button>
+        </nav>
+    </header>
 
+    <div class="modern-bg">
+        <div class="modern-card wide">
+            <h2 style="margin-bottom:30px;">Admin Dashboard</h2>
+            
+            <div style="display:flex; gap:20px; justify-content:center; margin-bottom:30px; flex-wrap:wrap;">
+                <div class="impact-banner" style="flex:1; min-width:150px; margin-bottom:0;">
+                    <span class="impact-count">{{ stats.ngos }}</span>
+                    <span>Total NGOs</span>
+                </div>
+                <div class="impact-banner" style="flex:1; min-width:150px; margin-bottom:0;">
+                    <span class="impact-count">{{ stats.cities }}</span>
+                    <span>Active Cities</span>
+                </div>
+                <div class="impact-banner" style="flex:1; min-width:150px; margin-bottom:0;">
+                    <span class="impact-count">{{ stats.cats }}</span>
+                    <span>Categories</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom:30px; display:flex; gap:15px; justify-content:center;">
+                <a href="/manage_users" class="modern-btn" style="background:var(--accent);">👥 Manage Users</a>
+                <a href="/manage_volunteers" class="modern-btn" style="background:#8b5cf6;">🤝 Manage Volunteers</a>
+            </div>
+
+            <div style="height:350px; margin-bottom:40px; background:var(--card-bg); padding:20px; border-radius:16px; border:1px solid var(--border-color);">
+                <canvas id="ngoChart"></canvas>
+            </div>
+
+            <div style="text-align:left; background:rgba(0,0,0,0.02); padding:25px; border-radius:16px; margin-bottom:30px;">
+                <h3 style="margin-top:0;">Add New NGO</h3>
+                <form action="/add" method="POST">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                        <input type="text" name="name" placeholder="NGO Name" required>
+                        <input type="text" name="city" placeholder="City" required>
+                    </div>
+                    <select name="category">
+                        <option value="" disabled selected>Select Category</option>
+                        <option>Health</option><option>Education</option><option>Environment</option>
+                        <option>Disaster Relief</option><option>Animal Welfare</option><option>Human Rights</option>
+                    </select>
+                    <input type="text" name="service" placeholder="Service Description" required>
+                    <input type="text" name="website_url" placeholder="Website URL" required>
+                    <div style="display:flex; align-items:center; gap:10px; margin:10px 0;">
+                        <input type="checkbox" name="is_urgent" style="width:20px; height:20px;">
+                        <label style="font-weight:600; color:#ef4444;">Mark as URGENT / Crisis</label>
+                    </div>
+                    <button class="modern-btn" style="width:100%;">Add NGO</button>
+                </form>
+            </div>
+
+            <h3 style="text-align:left;">Existing NGOs</h3>
+            <table class="modern-table">
+                <tr><th>Name</th><th>Category</th><th>City</th><th>Action</th></tr>
+                {% for ngo in ngos %}
+                <tr>
+                    <td>{{ ngo['name'] }} {% if ngo['is_urgent'] %}<span class="urgent-badge">!</span>{% endif %}</td>
+                    <td>{{ ngo['category'] }}</td>
+                    <td>{{ ngo['city'] }}</td>
+                    <td><a href="/delete/{{ngo['id']}}" style="color:#ef4444; font-weight:bold; text-decoration:none;">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Chart Logic
+        const ctx = document.getElementById('ngoChart').getContext('2d');
+        const categories = {};
+        document.querySelectorAll('.modern-table tr td:nth-child(2)').forEach(td => {
+            let cat = td.innerText;
+            categories[cat] = (categories[cat] || 0) + 1;
+        });
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(categories),
+                datasets: [{
+                    label: 'Number of NGOs',
+                    data: Object.values(categories),
+                    backgroundColor: ['#2563eb', '#0ea5e9', '#f59e0b', '#ef4444', '#8b5cf6'],
+                    borderRadius: 8
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: 'rgba(200,200,200,0.1)' } } }
+            }
+        });
+    </script>
+</body>
+</html>

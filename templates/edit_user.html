@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User - NGO Support Finder</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>pythp
+<body>
+    <header class="modern-header">
+        <div class="modern-header-logo">🌱 NGO Support Finder</div>
+        <nav class="modern-nav">
+            <a href="{{ url_for('admin') }}" class="modern-nav-link">Back to Dashboard</a>
+        </nav>
+    </header>
+    <div class="modern-bg">
+        <main style="width:100%;">
+            <div class="modern-card animate-fadein">
+                <div class="modern-logo">👤</div>
+                <h2 class="modern-title">Edit User Details</h2>
+                
+                <form method="POST" class="modern-form">
+                    <label style="font-weight:600; color:#185a9d;">Username</label>
+                    <input type="text" name="username" value="{{ user[1] }}" required>
+                    
+                    <label style="font-weight:600; color:#185a9d;">Role</label>
+                    <select name="role" required>
+                        <option value="user" {% if user[3] == 'user' %}selected{% endif %}>User</option>
+                        <option value="admin" {% if user[3] == 'admin' %}selected{% endif %}>Admin</option>
+                    </select>
+
+                    <label style="font-weight:600; color:#185a9d;">New Password (Optional)</label>
+                    <input type="password" name="password" placeholder="Leave blank to keep current password">
+                    
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button type="submit" class="modern-btn" style="flex:1;">Save Changes</button>
+                        <a href="{{ url_for('admin') }}" class="modern-btn" style="flex:1; background: #95a5a6; text-align:center; text-decoration:none;">Cancel</a>
+                    </div>
+                </form>
+
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <ul class="flash">
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>
